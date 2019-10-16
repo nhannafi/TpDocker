@@ -1,0 +1,41 @@
+version: '3.6'
+
+services:
+
+  site:
+    build: .
+    volumes: 
+      - ./:/var/www/html
+    ports:
+      - 8082:80
+
+    
+  mariadb:
+    image: mariadb
+    environment:
+      -MYSQL_DATABASE: tpDocker
+      -MYSQL_USER: root
+
+  pma:
+    depends_on:
+      - mariadb
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - '8081:80'
+    environment:
+      -PMA_HOST: mariadb
+      -PMA_PASSWORD: password 
+
+  mailhog:  
+    depends_on:
+      - mariadb
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025 #smtp:protocle d'envoi de mail
+      - 8025:8025 #http
+    environment:
+      {} 
+
+  
+    
+
